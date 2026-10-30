@@ -1,0 +1,167 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1b1b1b;
+  --muted: #5c5c5c;
+  --accent: #1a73e8;
+  --border: #d6d6d6;
+  --error: #b3261e;
+  --field-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1f22;
+    --fg: #f1f1f1;
+    --muted: #a8a8a8;
+    --accent: #8ab4f8;
+    --border: #44474c;
+    --error: #f2b8b5;
+    --field-bg: #26282c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 320px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+main {
+  padding: 14px 16px 12px;
+}
+
+h1 {
+  font-size: 15px;
+  margin: 0 0 4px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+form {
+  margin-top: 12px;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.switch input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+fieldset[disabled] {
+  opacity: 0.55;
+}
+
+label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--field-bg);
+  color: inherit;
+  font: inherit;
+}
+
+input[type="number"]:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.error {
+  margin: 0;
+  min-height: 0;
+  color: var(--error);
+  font-size: 11px;
+}
+
+.error:empty {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  flex: 0 0 auto;
+  background: transparent;
+  border-color: var(--border);
+  color: inherit;
+  font-weight: 500;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+.status {
+  min-height: 16px;
+  margin: 10px 0 0;
+  font-size: 12px;
+}
+
+.status.ok {
+  color: var(--accent);
+}
+
+.status.bad {
+  color: var(--error);
+}
+
+footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fake Location</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Fake Location</h1>
+        <p class="hint">Überschreibt den Standort für alle Webseiten. Daten bleiben lokal.</p>
+      </header>
+
+      <form id="settings" novalidate>
+        <label class="switch">
+          <input type="checkbox" id="enabled" />
+          <span>Fake-Standort aktiv</span>
+        </label>
+
+        <fieldset id="fields">
+          <label for="latitude">Breitengrad</label>
+          <input
+            type="number"
+            id="latitude"
+            name="latitude"
+            step="any"
+            min="-90"
+            max="90"
+            inputmode="decimal"
+            autocomplete="off"
+          />
+          <p class="error" id="latitude-error" role="alert"></p>
+
+          <label for="longitude">Längengrad</label>
+          <input
+            type="number"
+            id="longitude"
+            name="longitude"
+            step="any"
+            min="-180"
+            max="180"
+            inputmode="decimal"
+            autocomplete="off"
+          />
+          <p class="error" id="longitude-error" role="alert"></p>
+
+          <label for="accuracy">Genauigkeit in Metern</label>
+          <input
+            type="number"
+            id="accuracy"
+            name="accuracy"
+            step="any"
+            min="0"
+            inputmode="decimal"
+            autocomplete="off"
+          />
+          <p class="error" id="accuracy-error" role="alert"></p>
+
+          <button type="button" id="use-current" class="secondary">
+            Echten Standort übernehmen
+          </button>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit" id="save">Speichern</button>
+          <button type="button" id="reset" class="secondary">Zurücksetzen</button>
+        </div>
+      </form>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+
+      <footer>
+        <p class="hint">
+          Deaktiviert reicht die Erweiterung alle Anfragen an den echten Standort
+          weiter. Bereits geöffnete Tabs übernehmen Änderungen sofort.
+        </p>
+      </footer>
+    </main>
+
+    <script src="lib/validate.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

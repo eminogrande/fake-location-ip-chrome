@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fake Location E2E</title>
+  </head>
+  <body>
+    <p id="out">start</p>
+    <script>
+      // Laeuft beim Parsen, also VOR jedem weiteren Seitenskript:
+      // __flcState existiert nur, wenn das MAIN-World-Script schon lief.
+      document.body.dataset.early = window.__flcState ? 'override-early' : 'override-late';
+
+      const out = document.getElementById('out');
+      let watchId = null;
+      let watchHits = 0;
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          document.body.dataset.lat = String(position.coords.latitude);
+          document.body.dataset.lon = String(position.coords.longitude);
+          document.body.dataset.acc = String(position.coords.accuracy);
+          document.body.dataset.single = position.coords.altitude === null ? 'nulls-ok' : 'nulls-bad';
+          out.textContent = 'once-ok';
+        },
+        (error) => {
+          document.body.dataset.error = error.code + ':' + error.message;
+          out.textContent = 'once-error';
+        }
+      );
+
+      watchId = navigator.geolocation.watchPosition(
+        () => {
+          watchHits += 1;
+          document.body.dataset.watchHits = String(watchHits);
+          document.body.dataset.watchId = String(watchId);
+        },
+        (error) => {
+          document.body.dataset.watchError = String(error.code);
+        }
+      );
+
+      setTimeout(() => {
+        navigator.geolocation.clearWatch(watchId);
+        document.body.dataset.cleared = 'yes';
+        setTimeout(() => {
+          document.body.dataset.hitsAfterClear = String(watchHits);
+          document.body.dataset.done = 'yes';
+        }, 300);
+      }, 500);
+    </script>
+  </body>
+</html>

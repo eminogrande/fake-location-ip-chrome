@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fake Location – Smoke-Test</title>
+    <style>
+      body {
+        font: 14px/1.5 system-ui, sans-serif;
+        margin: 2rem auto;
+        max-width: 40rem;
+        padding: 0 1rem;
+      }
+      pre {
+        background: #f4f4f4;
+        border-radius: 8px;
+        padding: 12px;
+        min-height: 6rem;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      button {
+        margin-right: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Smoke-Test</h1>
+    <p>
+      Bei geladener Erweiterung muss hier der Fake-Standort erscheinen. Ist die
+      Erweiterung aus, kommt der echte Standort oder ein Berechtigungsfehler.
+    </p>
+    <p>
+      <button id="once">getCurrentPosition</button>
+      <button id="watch">watchPosition (5 s)</button>
+      <button id="clear">clearWatch</button>
+    </p>
+    <pre id="log">–</pre>
+
+    <script>
+      const logEl = document.getElementById('log');
+      let watchId = null;
+
+      function log(line) {
+        logEl.textContent += '\n' + line;
+      }
+
+      function describe(position) {
+        const c = position.coords;
+        return (
+          'lat=' + c.latitude +
+          ' lon=' + c.longitude +
+          ' acc=' + c.accuracy +
+          ' ts=' + position.timestamp +
+          ' type=' + (position.constructor ? position.constructor.name : '?')
+        );
+      }
+
+      document.getElementById('once').addEventListener('click', () => {
+        logEl.textContent = 'getCurrentPosition …';
+        navigator.geolocation.getCurrentPosition(
+          (p) => log('OK ' + describe(p)),
+          (e) => log('FEHLER ' + e.code + ' ' + e.message)
+        );
+      });
+
+      document.getElementById('watch').addEventListener('click', () => {
+        logEl.textContent = 'watchPosition …';
+        watchId = navigator.geolocation.watchPosition(
+          (p) => log('WATCH ' + describe(p)),
+          (e) => log('WATCH-FEHLER ' + e.code + ' ' + e.message)
+        );
+        log('watchId=' + watchId);
+        setTimeout(() => {
+          navigator.geolocation.clearWatch(watchId);
+          log('clearWatch(' + watchId + ') – weitere WATCH-Zeilen wären ein Fehler');
+        }, 5000);
+      });
+
+      document.getElementById('clear').addEventListener('click', () => {
+        if (watchId === null) {
+          log('kein aktiver Watch');
+          return;
+        }
+        navigator.geolocation.clearWatch(watchId);
+        log('clearWatch(' + watchId + ')');
+        watchId = null;
+      });
+
+      // Absichtlich sofort beim Parsen: prueft, ob der Override schon vor
+      // Seitenskripten greift.
+      window.__earlyRead =
+        typeof navigator.geolocation.getCurrentPosition === 'function'
+          ? 'geolocation vorhanden'
+          : 'geolocation fehlt';
+      logEl.textContent = window.__earlyRead;
+    </script>
+  </body>
+</html>

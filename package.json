@@ -1,0 +1,10 @@
+{
+  "name": "fake-location-ip-chrome",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome/Brave MV3 extension that overrides navigator.geolocation",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

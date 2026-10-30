@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Fake Location",
+  "version": "1.0.0",
+  "description": "Überschreibt navigator.geolocation mit einem frei wählbaren Standort. Alles bleibt lokal.",
+  "permissions": ["storage", "geolocation"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Fake Location",
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/bridge.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/lib/validate.js", "src/lib/position.js", "src/inject.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    }
+  ]
+}
